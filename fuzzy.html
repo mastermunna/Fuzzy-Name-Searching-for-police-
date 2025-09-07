@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP Police - Hindi-English Name Search System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .title-section h1 {
+            color: #1e3c72;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .title-section p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.8);
+            color: #1e3c72;
+            border: 1px solid rgba(30, 60, 114, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-1px);
+        }
+
+        /* Stats Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-info h3 {
+            color: #333;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .icon-blue { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .icon-green { background: linear-gradient(135deg, #56ab2f, #a8e6cf); color: white; }
+        .icon-orange { background: linear-gradient(135deg, #ff9a56, #ff6b35); color: white; }
+        .icon-purple { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+
+        /* Search Section */
+        .search-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .search-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .confidence-slider {
+            width: 80px;
+        }
+
+        /* Results Section */
+        .results-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .result-card {
+            border: 1px solid #e1e5e9;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: #667eea;
+        }
+
+        .result-card.expanded {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .result-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .result-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .result-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .result-details h3 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .result-meta {
+            color: #666;
+            font-size: 14px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .confidence-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .confidence-high {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+        }
+
+        .confidence-medium {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        .confidence-low {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .result-expanded {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e5e9;
+            display: none;
+        }
+
+        .result-expanded.show {
+            display: block;
+        }
+
+        .variations {
+            margin-bottom: 20px;
+        }
+
+        .variations h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .variation-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .variation-tag {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .case-refs {
+            margin-bottom: 20px;
+        }
+
+        .case-refs h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .case-ref {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            margin-right: 15px;
+        }
+
+        .case-ref:hover {
+            text-decoration: underline;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        /* Add Name Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .no-results-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .result-main {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        .hindi-support {
+            font-family: 'Segoe UI', 'Noto Sans Devanagari', Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">🚔</div>
+                    <div class="title-section">
+                        <h1>MP Police Name Search System</h1>
+                        <p>Hindi-English Fuzzy Matching & Transliteration Engine</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="showAddModal()">
+                        ➕ Add Name
+                    </button>
+                    <button class="btn btn-secondary" onclick="showSettings()">
+                        ⚙️ Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3 id="totalRecords">45,678</h3>
+                    <p>Total Records</p>
+                </div>
+                <div class="stat-icon icon-blue">📊</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3 id="searchesToday">234</h3>
+                    <p>Searches Today</p>
+                </div>
+                <div class="stat-icon icon-green">🔍</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3 id="duplicatesFound">89</h3>
+                    <p>Duplicates Found</p>
+                </div>
+                <div class="stat-icon icon-orange">⚠️</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3 id="accuracy">94.5%</h3>
+                    <p>Match Accuracy</p>
+                </div>
+                <div class="stat-icon icon-purple">✅</div>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-input hindi-support" 
+                        placeholder="Search names in Hindi or English (e.g., सुरेश, Suresh, Kumar)" 
+                        onkeyup="handleKeyPress(event)"
+                    >
+                    <div class="search-icon">🔍</div>
+                </div>
+                <button class="btn btn-primary" onclick="performSearch()" id="searchBtn">
+                    Search
+                </button>
+            </div>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <span>🔍 Filter:</span>
+                    <select class="filter-select" id="districtFilter">
+                        <option value="">All Districts</option>
+                        <option value="Bhopal">Bhopal</option>
+                        <option value="Indore">Indore</option>
+                        <option value="Gwalior">Gwalior</option>
+                        <option value="Jabalpur">Jabalpur</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span>Min Confidence:</span>
+                    <input type="range" id="confidenceSlider" class="confidence-slider" min="0.5" max="1" step="0.05" value="0.7" onchange="updateConfidenceDisplay()">
+                    <span id="confidenceDisplay">70%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection" style="display: none;">
+            <div class="results-header">
+                <h2>👤 Search Results (<span id="resultCount">0</span>)</h2>
+            </div>
+            <div id="resultsContainer">
+                <!-- Results will be populated here -->
+            </div>
+        </div>
+
+        <!-- No Results -->
+        <div id="noResults" class="results-section" style="display: none;">
+            <div class="no-results">
+                <div class="no-results-icon">❌</div>
+                <h3>No matches found</h3>
+                <p>Try searching with different spelling variations or check if the name is recorded in a different script.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Name Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>➕ Add New Name Record</h3>
+            </div>
+            
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" id="newName" class="form-control hindi-support" placeholder="Enter name in Hindi or English">
+            </div>
+            
+            <div class="form-group">
+                <label>Script</label>
+                <select id="newScript" class="form-control">
+                    <option value="en">English</option>
+                    <option value="hi">Hindi</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>District</label>
+                <input type="text" id="newDistrict" class="form-control" placeholder="e.g., Bhopal, Indore">
+            </div>
+            
+            <div class="form-group">
+                <label>Case Reference (Optional)</label>
+                <input type="text" id="newCaseRef" class="form-control" placeholder="e.g., FIR/2024/001">
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="addNewName()">Add Record</button>
+                <button class="btn btn-secondary" onclick="hideAddModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample database - In real implementation, this would be from backend API
+        let nameDatabase = [
+            {
+                id: '1',
+                raw: 'सुरेश',
+                std_hi: 'सुरेश',
+                std_en: 'Suresh',
+                phonetic: 'SURS',
+                variations: ['Suresh', 'Sursh', 'Sureash', 'Sureshh'],
+                person_id: 'P001',
+                district: 'Bhopal',
+                case_refs: ['FIR/2024/001', 'FIR/2024/045'],
+                created_date: '2024-01-15'
+            },
+            {
+                id: '2',
+                raw: 'Sursh',
+                std_hi: 'सुरश',
+                std_en: 'Sursh',
+                phonetic: 'SURS',
+                variations: ['Suresh', 'Surash', 'सुरेश'],
+                person_id: 'P002',
+                district: 'Indore',
+                case_refs: ['FIR/2024/023'],
+                created_date: '2024-02-01'
+            },
+            {
+                id: '3',
+                raw: 'Kumar',
+                std_hi: 'कुमार',
+                std_en: 'Kumar',
+                phonetic: 'KMR',
+                variations: ['Kumaar', 'Kumarr', 'कुमार'],
+                person_id: 'P003',
+                district: 'Bhopal',
+                case_refs: [],
+                created_date: '2024-01-20'
+            },
+            {
+                id: '4',
+                raw: 'रमेश',
+                std_hi: 'रमेश',
+                std_en: 'Ramesh',
+                phonetic: 'RMS',
+                variations: ['Ramesh', 'Rameshh', 'Rameswar'],
+                person_id: 'P004',
+                district: 'Gwalior',
+                case_refs: ['FIR/2024/067', 'FIR/2024/089'],
+                created_date: '2024-01-25'
+            },
+            {
+                id: '5',
+                raw: 'Anil',
+                std_hi: 'अनिल',
+                std_en: 'Anil',
+                phonetic: 'ANL',
+                variations: ['Aneel', 'अनील', 'Anill'],
+                person_id: 'P005',
+                district: 'Jabalpur',
+                case_refs: ['FIR/2024/012'],
+                created_date: '2024-02-10'
+            },
+            {
+                id: '6',
+                raw: 'Sunil',
+                std_hi: 'सुनील',
+                std_en: 'Sunil',
+                phonetic: 'SNL',
+                variations: ['Suneel', 'सुनिल', 'Sunill'],
+                person_id: 'P006',
+                district: 'Bhopal',
+                case_refs: [],
+                created_date: '2024-01-30'
+            }
+        ];
+
+        let currentResults = [];
+        let expandedResults = new Set();
+
+        // Initialize the application
+        function init() {
+            updateStats();
+            updateConfidenceDisplay();
+        }
+
+        // Update dashboard statistics
+        function updateStats() {
+            document.getElementById('totalRecords').textContent = nameDatabase.length.toLocaleString();
+            document.getElementById('searchesToday').textContent = Math.floor(Math.random() * 300) + 100;
+            document.getElementById('duplicatesFound').textContent = Math.floor(Math.random() * 100) + 50;
+            document.getElementById('accuracy').textContent = (Math.random() * 5 + 90).toFixed(1) + '%';
+        }
+
+        // Handle search input keypress
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        }
+
+        // Update confidence display
+        function updateConfidenceDisplay() {
+            const slider = document.getElementById('confidenceSlider');
+            const display = document.getElementById('confidenceDisplay');
+            display.textContent = Math.round(slider.value * 100) + '%';
+        }
+
+        // Fuzzy matching algorithm
+        function fuzzyMatch(query, record) {
+            const q = query.toLowerCase();
+            
+            // Check exact matches
+            if (record.std_en.toLowerCase() === q || record.std_hi === query || record.raw.toLowerCase() === q) {
+                return 1.0;
+            }
+
+            // Check phonetic match
+            if (record.phonetic === generatePhonetic(query)) {
+                return 0.95;
+            }
+
+            // Check variations
+            for (let variation of record.variations) {
+                if (variation.toLowerCase() === q) {
+                    return 0.9;
+                }
+                if (variation.toLowerCase().includes(q) || q.includes(variation.toLowerCase())) {
+                    return 0.85;
+                }
+            }
+
+            // Levenshtein distance-based similarity
+            const similarity1 = stringSimilarity(q, record.std_en.toLowerCase());
+            const similarity2 = stringSimilarity(query, record.std_hi);
+            const similarity3 = stringSimilarity(query, record.raw.toLowerCase());
+
+            return Math.max(similarity1, similarity2, similarity3);
+        }
+
+        // Simple string similarity (Levenshtein-based)
+        function stringSimilarity(str1, str2) {
+            const longer = str1.length > str2.length ? str1 : str2;
+            const shorter = str1.length > str2.length ? str2 : str1;
+            
+            if (longer.length === 0) return 1.0;
+            
+            const distance = levenshteinDistance(longer, shorter);
+            return (longer.length - distance) / longer.length;
+        }
+
+        // Levenshtein distance calculation
+        function levenshteinDistance(str1, str2) {
+            const matrix = [];
+            
+            for (let i = 0; i <= str2.length; i++) {
+                matrix[i] = [i];
+            }
+            
+            for (let j = 0; j <= str1.length; j++) {
+                matrix[0][j] = j;
+            }
+            
+            for (let i = 1; i <= str2.length; i++) {
+                for (let j = 1; j <= str1.length; j++) {
+                    if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+                        matrix[i][j] = matrix[i - 1][j - 1];
+                    } else {
+                        matrix[i][j] = Math.min(
+                            matrix[i - 1][j - 1] + 1,
+                            matrix[i][j - 1] + 1,
+                            matrix[i - 1][j] + 1
+                        );
+                    }
+                }
+            }
+            
+            return matrix[str2.length][str1.length];
+        }
+
+        // Generate simple phonetic code
+        function generatePhonetic(name) {
+            // Simple phonetic mapping for demonstration
+            const phoneticMap = {
+                'a': 'A', 'aa': 'A', 'आ': 'A', 'अ': 'A',
+                'i': 'I', 'ee': 'I', 'ई': 'I', 'इ': 'I',
+                'u': 'U', 'oo': 'U', 'ऊ': 'U', 'उ': 'U',
+                'e': 'E', 'ए': 'E', 'ऐ': 'E',
+                'o': 'O', 'ओ': 'O', 'औ': 'O',
+                'k': 'K', 'kh': 'K', 'ख': 'K', 'क': 'K',
+                'g': 'G', 'gh': 'G', 'घ': 'G', 'ग': 'G',
+                's': 'S', 'sh': 'S', 'स': 'S', 'श': 'S', 'ष': 'S',
+                'r': 'R', 'र': 'R',
+                'm': 'M', 'म': 'M',
+                'n': 'N', 'न': 'N', 'ण': 'N',
+                'l': 'L', 'ल': 'L',
+                'v': 'V', 'w': 'V', 'व': 'V',
+                'p': 'P', 'ph': 'P', 'प': 'P', 'फ': 'P',
+                'b': 'B', 'bh': 'B', 'ब': 'B', 'भ': 'B',
+                't': 'T', 'th': 'T', 'त': 'T', 'थ': 'T', 'ट': 'T', 'ठ': 'T',
+                'd': 'D', 'dh': 'D', 'द': 'D', 'ध': 'D', 'ड': 'D', 'ढ': 'D',
+                'j': 'J', 'jh': 'J', 'ज': 'J', 'झ': 'J',
+                'y': 'Y', 'य': 'Y',
+                'h': 'H', 'ह': 'H',
+                'ch': 'C', 'च': 'C', 'छ': 'C',
+                ' ': ''
+            };
+
+            // Normalize and split name into tokens
+            name = name.trim().toLowerCase();
+            let result = '';
+            let i = 0;
+            while (i < name.length) {
+                let found = false;
+                // Try to match 2-char tokens first
+                if (i + 1 < name.length) {
+                    let twoChar = name.substring(i, i + 2);
+                    if (phoneticMap[twoChar]) {
+                        result += phoneticMap[twoChar];
+                        i += 2;
+                        found = true;
+                    }
+                }
+                // If not found, try 1-char token
+                if (!found) {
+                    let oneChar = name[i];
+                    if (phoneticMap[oneChar]) {
+                        result += phoneticMap[oneChar];
+                    }
+                    i += 1;
+                }
+            }
+            // Remove duplicate consecutive letters
+            result = result.replace(/(.)\1+/g, '$1');
+            return result.toUpperCase();
+        }
+
+        // Perform search operation
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) return;
+
+            const districtFilter = document.getElementById('districtFilter').value;
+            const confidenceThreshold = parseFloat(document.getElementById('confidenceSlider').value);
+
+            // Fuzzy search in the database
+            currentResults = nameDatabase.filter(record => {
+                // Apply district filter if selected
+                if (districtFilter && record.district !== districtFilter) {
+                    return false;
+                }
+
+                // Calculate fuzzy match score
+                const score = fuzzyMatch(query, record);
+                
+                // Check if score meets the confidence threshold
+                return score >= confidenceThreshold;
+            });
+
+            displayResults();
+        }
+
+        // Display search results
+        function displayResults() {
+            const resultsContainer = document.getElementById('resultsContainer');
+            const resultCount = document.getElementById('resultCount');
+            resultsContainer.innerHTML = '';
+
+            if (currentResults.length === 0) {
+                document.getElementById('noResults').style.display = 'block';
+                document.getElementById('resultsSection').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('noResults').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'block';
+            resultCount.textContent = currentResults.length.toLocaleString();
+
+            currentResults.forEach((result, index) => {
+                const resultCard = document.createElement('div');
+                resultCard.className = 'result-card';
+                resultCard.innerHTML = `
+                    <div class="result-main">
+                        <div class="result-info">
+                            <div class="result-avatar">${result.std_en.charAt(0).toUpperCase()}</div>
+                            <div class="result-details">
+                                <h3>${result.std_en} <span class="badge badge-success">${result.district}</span></h3>
+                                <div class="result-meta">
+                                    <span>${result.case_refs.length} Cases</span>
+                                    <span class="confidence-badge confidence-${getConfidenceLevel(result.phonetic)}">${getConfidenceLevel(result.phonetic)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Expandable content
+                const expandedContent = document.createElement('div');
+                expandedContent.className = 'result-expanded';
+                expandedContent.innerHTML = `
+                    <div class="variations">
+                        <h4>Variations:</h4>
+                        <div class="variation-tags">
+                            ${result.variations.map(v => `<span class="variation-tag">${v}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="case-refs">
+                        <h4>Case References:</h4>
+                        ${result.case_refs.length > 0 ? result.case_refs.map(ref => `<a href="#" class="case-ref">${ref}</a>`).join(', ') : '<em>No case references</em>'}
+                    </div>
+                `;
+
+                resultCard.appendChild(expandedContent);
+                resultsContainer.appendChild(resultCard);
+
+                // Toggle expanded view on click
+                resultCard.onclick = () => {
+                    const isExpanded = expandedResults.has(result.id);
+                    if (isExpanded) {
+                        expandedResults.delete(result.id);
+                        resultCard.classList.remove('expanded');
+                        expandedContent.classList.remove('show');
+                    } else {
+                        expandedResults.add(result.id);
+                        resultCard.classList.add('expanded');
+                        expandedContent.classList.add('show');
+                    }
+                };
+            });
+        }
+
+        // Get confidence level text
+        function getConfidenceLevel(phoneticCode) {
+            const score = Math.random(); // Simulate confidence score
+            if (score > 0.8) return 'high';
+            if (score > 0.5) return 'medium';
+            return 'low';
+        }
+
+        // Add new name record
+        function addNewName() {
+            const name = document.getElementById('newName').value.trim();
+            const script = document.getElementById('newScript').value;
+            const district = document.getElementById('newDistrict').value.trim();
+            const caseRef = document.getElementById('newCaseRef').value.trim();
+
+            if (!name || !district) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // Generate new record ID
+            const newId = (nameDatabase.length + 1).toString();
+
+            // Create new name record
+            const newRecord = {
+                id: newId,
+                raw: name,
+                std_hi: script === 'hi' ? name : '',
+                std_en: script === 'en' ? name : '',
+                phonetic: generatePhonetic(name),
+                variations: [name],
+                person_id: 'P' + String(Math.floor(Math.random() * 1000)).padStart(3, '0'),
+                district: district,
+                case_refs: caseRef ? [caseRef] : [],
+                created_date: new Date().toISOString().split('T')[0]
+            };
+
+            // Add to database (simulated)
+            nameDatabase.push(newRecord);
+
+            // Update UI
+            document.getElementById('totalRecords').textContent = nameDatabase.length.toLocaleString();
+            hideAddModal();
+            performSearch();
+        }
+
+        // Show add name modal
+        function showAddModal() {
+            document.getElementById('addModal').classList.add('show');
+        }
+
+        // Hide add name modal
+        function hideAddModal() {
+            document.getElementById('addModal').classList.remove('show');
+            document.getElementById('newName').value = '';
+            document.getElementById('newDistrict').value = '';
+            document.getElementById('newCaseRef').value = '';
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
